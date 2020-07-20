@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<h1>Data for {{ symbol }}</h1>
+{% for date, prices in dailyPrices.items %}
+  <p>Date: {{ date }}</p>
+  {% for type, price in prices.items %}
+    <li>{{ type|slice:"3:" }}: {{ price }}</li>
+  {% endfor %}
+{% endfor %}
+{% endblock %}
