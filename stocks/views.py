@@ -25,6 +25,7 @@ def dashboard(request):
     # print(dailyPrices)
 
     context = {
+        "title": "Dashboard",
         "symbol": symbol,
         "dailyPrices": dailyPrices,
     }

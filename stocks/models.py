@@ -1,11 +1,11 @@
 from django.db import models
 
 # Create your models here.
-class FavoritesList(models.Model):
-    pass
+# class FavoritesList(models.Model):
+#     pass
 
 class Company(models.Model):
-    favoritesList = models.ForeignKey('FavoritesList', on_delete=models.CASCADE)
+    # favoritesList = models.ForeignKey('FavoritesList', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     symbol = models.CharField(max_length=5)
 
