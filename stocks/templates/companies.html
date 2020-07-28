@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+
+<title>{{ title }}</title>
+
+{% for company in companies %}
+  <p>{{ company.name }}: {{ company.symbol }}</p>
+{% endfor %}
+
+{% endblock %}
