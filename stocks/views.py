@@ -4,7 +4,7 @@ import requests
 
 # VIEWS ========================================================================
 
-def dashboard(request):
+def viewDashboard(request):
     # make API call
     symbol= "GOOG"  # TODO
     data = getPrices(symbol)
@@ -28,7 +28,7 @@ def dashboard(request):
     }
     return render(request, 'dashboard.html', context)
 
-def companies(request):
+def viewCompanies(request):
     companies = Company.objects.all()
 
     context = {
@@ -37,28 +37,61 @@ def companies(request):
     }
     return render(request, 'companies.html', context)
 
+def viewSearch(request):
+    # TODO: hard coded
+    companies = searchCompanies("micro")["bestMatches"]
+    # for company in companies:
+    #     print(company["1. symbol"], company["2. name"])
+
+    # Create list of lists to send
+    companiesList = []
+    for company in companies:
+        companiesList.append([company["1. symbol"], company["2. name"]])
+
+    context = {
+        "title": "Company Search",
+        "companies": companiesList,
+    }
+    return render(request, 'search.html', context)
 
 
 # Other functions because i couldn't figure out how to split files =============
 
-def getPrices(symbol_):
+def getPrices(symbol):
     """
-    Calls daily price of specified company and returns JSON dictionary
+    Call daily price of specified company
 
-    symbol_: str
+    symbol: str
     return value: dict
     """
 
     function = "TIME_SERIES_DAILY"
-    symbol = symbol_
+    sym = symbol
     apiKey = "MXZJD1EMBPG49Y9U"
-    payload = {"function": function, "symbol": symbol, "apikey": apiKey}
+    payload = {"function": function, "symbol": sym, "apikey": apiKey}
     url = "https://www.alphavantage.co/query"
 
     r = requests.get(url, params=payload)
     return r.json()
 
-def addCompany(name_, symbol_):
+def searchCompanies(keywords):
+    """
+    Search for companies based on keywords
+
+    keywords: str
+    return value: list
+    """
+
+    function = "SYMBOL_SEARCH"
+    kw = keywords
+    apiKey = "MXZJD1EMBPG49Y9U"
+    payload = {"function": function, "keywords": kw, "apikey": apiKey}
+    url = "https://www.alphavantage.co/query"
+
+    r = requests.get(url, params=payload)
+    return r.json()
+
+def addCompany(name, symbol):
     """
     Add company to watch for in Django database
 
@@ -67,5 +100,5 @@ def addCompany(name_, symbol_):
     return value: None
     """
 
-    c = Company(name=name_, symbol=symbol_)
+    c = Company(name=name, symbol=symbol)
     c.save()
