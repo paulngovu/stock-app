@@ -4,9 +4,10 @@
 
 <title>{{ title }}</title>
 
-<h1>Companies</h1>
-{% for company in companies %}
-  <p>{{ company.0 }}: {{ company.1 }}</p>
-{% endfor %}
+<form action="{% url 'search_results' %}" method="get">
+  {% csrf_token %}
+  <input type="text" name="searchBar" id="search" placeholder="Search for companies">
+  <input type="submit" name="submit" value="Search">
+</form>
 
 {% endblock %}

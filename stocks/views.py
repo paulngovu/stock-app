@@ -5,26 +5,15 @@ import requests
 # VIEWS ========================================================================
 
 def viewDashboard(request):
-    # make API call
-    symbol= "GOOG"  # TODO
-    data = getPrices(symbol)
+    # Get all saved companies
+    companies = Company.objects.all()
 
-    # dailyPrices = []
-    # for date, prices in data["Time Series (Daily)"].items():
-    #     dailyPrice = [date]
-    #     for type, price in prices.items():
-    #         dailyPrice.append(price)
-    #     dailyPrices.append(dailyPrice)
-    # for i in dailyPrices:
-    #     print(i)
-
-    dailyPrices = data["Time Series (Daily)"]
-    # print(dailyPrices)
+    errormsg = "You are not watching any companies" if not companies else ""
 
     context = {
         "title": "Dashboard",
-        "symbol": symbol,
-        "dailyPrices": dailyPrices,
+        "companies": companies,
+        "errormsg": errormsg,
     }
     return render(request, 'dashboard.html', context)
 
@@ -39,20 +28,29 @@ def viewCompanies(request):
 
 def viewSearch(request):
     # TODO: hard coded
-    companies = searchCompanies("micro")["bestMatches"]
+    # companies = searchCompanies("micro")["bestMatches"]
     # for company in companies:
     #     print(company["1. symbol"], company["2. name"])
 
     # Create list of lists to send
-    companiesList = []
-    for company in companies:
-        companiesList.append([company["1. symbol"], company["2. name"]])
+    # companiesList = []
+    # for company in companies:
+    #     companiesList.append([company["1. symbol"], company["2. name"]])
 
     context = {
         "title": "Company Search",
-        "companies": companiesList,
+        # "companies": companiesList,
     }
     return render(request, 'search.html', context)
+
+def viewSearchResults(request):
+    search = ""
+
+    context = {
+        "title": "Company Search Results",
+        "search": search,
+    }
+    return render(request, 'search_results.html', context)
 
 
 # Other functions because i couldn't figure out how to split files =============
