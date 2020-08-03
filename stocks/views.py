@@ -2,7 +2,9 @@ from django.shortcuts import render
 from .models import Company
 import requests
 
-# VIEWS ========================================================================
+# ==============================================================================
+# VIEWS
+# ==============================================================================
 
 def viewDashboard(request):
     # Get all saved companies
@@ -44,16 +46,27 @@ def viewSearch(request):
     return render(request, 'search.html', context)
 
 def viewSearchResults(request):
-    search = ""
+    keyword = request.GET.get("search")
+    companies = searchCompanies(keyword)["bestMatches"]
+    errormsg = "No results found" if not keyword else ""
+
+    # Create list of lists to send
+    companiesList = []
+    for company in companies:
+        companiesList.append([company["1. symbol"], company["2. name"]])
 
     context = {
         "title": "Company Search Results",
-        "search": search,
+        "companies": companiesList,
+        "errormsg": errormsg,
     }
     return render(request, 'search_results.html', context)
 
 
-# Other functions because i couldn't figure out how to split files =============
+
+# ==============================================================================
+# Other functions because i couldn't figure out how to split files
+# ==============================================================================
 
 def getPrices(symbol):
     """
@@ -93,8 +106,8 @@ def addCompany(name, symbol):
     """
     Add company to watch for in Django database
 
-    name_: str
-    symbol_: str
+    name: str
+    symbol: str
     return value: None
     """
 

@@ -4,6 +4,16 @@
 
 <title>{{ title }}</title>
 
-<p>{{ search }}</p>
+<h1>Search Results</h1>
+<p>{{ errormsg }}</p>
+
+<div class="wrapper">
+  {% for company in companies %}
+    <div class="container">
+      <h2>{{ company.0 }}</h2>
+      <h3>{{ company.1 }}</h3>
+    </div>
+  {% endfor %}
+</div>
 
 {% endblock %}
