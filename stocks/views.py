@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Company
-import requests
+import requests                     # for calling API
+import ast                          # for turning str into list
 
 # ==============================================================================
 # VIEWS
@@ -19,41 +20,24 @@ def viewDashboard(request):
     }
     return render(request, 'dashboard.html', context)
 
-def viewCompanies(request):
-    companies = Company.objects.all()
-
-    context = {
-        "title": "Followed Companies",
-        "companies": companies,
-    }
-    return render(request, 'companies.html', context)
-
 def viewSearch(request):
-    # TODO: hard coded
-    # companies = searchCompanies("micro")["bestMatches"]
-    # for company in companies:
-    #     print(company["1. symbol"], company["2. name"])
-
-    # Create list of lists to send
-    # companiesList = []
-    # for company in companies:
-    #     companiesList.append([company["1. symbol"], company["2. name"]])
-
     context = {
         "title": "Company Search",
-        # "companies": companiesList,
     }
     return render(request, 'search.html', context)
 
 def viewSearchResults(request):
     keyword = request.GET.get("search")
-    companies = searchCompanies(keyword)["bestMatches"]
-    errormsg = "No results found" if not keyword else ""
+    errormsg = "No results found"
+    if keyword:
+        companies = searchCompanies(keyword)["bestMatches"]
+        errormsg = ""
 
     # Create list of lists to send
     companiesList = []
-    for company in companies:
-        companiesList.append([company["1. symbol"], company["2. name"]])
+    if keyword:
+        for company in companies:
+            companiesList.append([company["1. symbol"], company["2. name"]])
 
     context = {
         "title": "Company Search Results",
@@ -61,6 +45,20 @@ def viewSearchResults(request):
         "errormsg": errormsg,
     }
     return render(request, 'search_results.html', context)
+
+def viewCompanies(request):
+    if request.method == "POST":
+        company = ast.literal_eval(request.POST.get("company"))
+        print(company)
+        addCompany(company[1], company[0])
+
+    companies = Company.objects.all()
+
+    context = {
+        "title": "Followed Companies",
+        "companies": companies,
+    }
+    return render(request, 'companies.html', context)
 
 
 

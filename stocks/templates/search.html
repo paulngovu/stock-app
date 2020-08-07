@@ -8,7 +8,7 @@
 
 <form action="{% url 'search_results' %}" method="get" value="{{request.GET.search}}">
   {% csrf_token %}
-  <input type="text" name="search" value="{{request.GET.search}}" placeholder="Search for companies">
+  <input type="text" name="search" value="{{request.GET.search}}" placeholder="Search for companies" autocomplete="off" required>
   <input type="submit" name="submit" value="Search">
 </form>
 

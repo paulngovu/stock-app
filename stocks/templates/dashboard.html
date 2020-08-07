@@ -9,13 +9,15 @@
 
 <div class="wrapper">
   {% for company in companies %}
-    <div class="container">
-      <h2>{{ company.symbol }}</h2>
-      <h3>{{ company.name }}</h3>
+    <div class="wrapper">
+      <div class="container">
+        <h2>{{ company.symbol }}</h2>
+        <h3>{{ company.name }}</h3>
+      </div>
     </div>
   {% endfor %}
 </div>
 
-<a href="{% url 'search' %}">Search for more companies</a>
+<a class="btn btn-primary" href="{% url 'search' %}">Search for more companies</a>
 
 {% endblock %}

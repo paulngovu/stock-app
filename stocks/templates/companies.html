@@ -4,8 +4,14 @@
 
 <title>{{ title }}</title>
 
-{% for company in companies %}
-  <p>{{ company.name }}: {{ company.symbol }}</p>
-{% endfor %}
+<div class="wrapper">
+  <div class="container">
+    {% for company in companies %}
+      <p>{{ company.name }}: {{ company.symbol }}</p>
+    {% endfor %}
+  </div>
+</div>
+
+<a class="btn btn-primary" href="/">Home</a>
 
 {% endblock %}

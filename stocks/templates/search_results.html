@@ -12,6 +12,11 @@
     <div class="container">
       <h2>{{ company.0 }}</h2>
       <h3>{{ company.1 }}</h3>
+      <form action="{% url 'companies' %}" method="post" value="{{request.POST.company}}">
+        {% csrf_token %}
+        <input type="hidden" name="company" value= "{{ company }}" required>
+        <input type="submit" name="submit" value="Add Company">
+      </form>
     </div>
   {% endfor %}
 </div>
