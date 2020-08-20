@@ -8,14 +8,27 @@ import ast                          # for turning str into list
 # ==============================================================================
 
 def viewDashboard(request):
+    # Remove a company from watchlist
+    if request.method == "POST":
+        deleteCompany(request.POST.get("companyName"))
+
     # Get all saved companies
     companies = Company.objects.all()
+
+    # Create list of companies with name, symbol, recommendation
+    companiesList = []
+    for company in companies:
+        # Add dictionary to list
+        companiesList.append({  "name": company.name,
+                                "symbol": company.symbol,
+                                "recommendation": getRecommendation(company)})
+    # companiesList.sort(key = lambda x: x["name"])
 
     errormsg = "You are not watching any companies" if not companies else ""
 
     context = {
         "title": "Dashboard",
-        "companies": companies,
+        "companies": companiesList,
         "errormsg": errormsg,
     }
     return render(request, 'dashboard.html', context)
@@ -47,10 +60,13 @@ def viewSearchResults(request):
     return render(request, 'search_results.html', context)
 
 def viewCompanies(request):
+    # Add company to watchlist
     if request.method == "POST":
+        # req comes back as string, convert to list
         company = ast.literal_eval(request.POST.get("company"))
-        print(company)
-        addCompany(company[1], company[0])
+        # print(company)
+        if company[1] not in [company.name for company in Company.objects.all()]:
+            addCompany(company[1], company[0])
 
     companies = Company.objects.all()
 
@@ -111,3 +127,42 @@ def addCompany(name, symbol):
 
     c = Company(name=name, symbol=symbol)
     c.save()
+
+def deleteCompany(name):
+    """
+    Delete company from Django database
+
+    name: str
+    return value: None
+    """
+
+    c = Company.objects.filter(name=name)
+    if c:
+        c.delete()
+
+def getRecommendation(company):
+    """
+    Searches prices of company, return recommendation
+
+    company: Company obj
+    return value: str
+    """
+
+    prices = getPrices(company.symbol)
+
+    # Get 3 most recent days
+    firstThreeDays = []
+    index = 0
+    for price in prices['Time Series (Daily)'].values():
+        if index >= 3:
+            break
+        firstThreeDays.append(price)
+        index += 1
+    # print(firstThreeDays)
+
+    res = "HOLD"
+    # Consider action if volume of most recent day exceeds 10% of oldest day
+    if int(firstThreeDays[0]['5. volume']) * 1.1 >= int(firstThreeDays[2]['5. volume']):
+        res = "ACTION"
+
+    return res

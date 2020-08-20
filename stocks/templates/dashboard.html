@@ -13,11 +13,13 @@
       <div class="container">
         <h2>{{ company.symbol }}</h2>
         <h3>{{ company.name }}</h3>
+        <h4>{{ company.recommendation }}</h4>
       </div>
     </div>
   {% endfor %}
 </div>
 
+<a class="btn btn-primary" href="{% url 'companies' %}">Manage Companies</a>
 <a class="btn btn-primary" href="{% url 'search' %}">Search for more companies</a>
 
 {% endblock %}

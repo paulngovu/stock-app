@@ -5,11 +5,17 @@
 <title>{{ title }}</title>
 
 <div class="wrapper">
-  <div class="container">
-    {% for company in companies %}
-      <p>{{ company.name }}: {{ company.symbol }}</p>
-    {% endfor %}
-  </div>
+  {% for company in companies %}
+    <div class="container">
+      <h2>{{ company.name }}</h2>
+      <h3>{{ company.symbol }}</h3>
+      <form action="{% url 'dashboard' %}" method="post" value="{{request.POST.companyName}}">
+        {% csrf_token %}
+        <input type="hidden" name="companyName" value= "{{ company.name }}" required>
+        <input type="submit" name="submit" value="Remove Company">
+      </form>
+    </div>
+  {% endfor %}
 </div>
 
 <a class="btn btn-primary" href="/">Home</a>
