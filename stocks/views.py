@@ -97,7 +97,7 @@ def getPrices(symbol):
     url = "https://www.alphavantage.co/query"
 
     r = requests.get(url, params=payload)
-    return r.json()
+    return r.json() if r.status_code == 200 else None
 
 def searchCompanies(keywords):
     """
@@ -149,6 +149,8 @@ def getRecommendation(company):
     """
 
     prices = getPrices(company.symbol)
+    if not prices:
+        return "NO DATA"
 
     # Get 3 most recent days
     firstThreeDays = []
@@ -163,6 +165,11 @@ def getRecommendation(company):
     res = "HOLD"
     # Consider action if volume of most recent day exceeds 10% of oldest day
     if int(firstThreeDays[0]['5. volume']) * 1.1 >= int(firstThreeDays[2]['5. volume']):
-        res = "ACTION"
+        # If price goes up, everyone is buying
+        if float(firstThreeDays[2]['4. close']) - float(firstThreeDays[0]['4. close']) > 0:
+            res = "BUY"
+        # If price goes down, everyone is selling
+        else:
+            res = "SELL"
 
     return res
