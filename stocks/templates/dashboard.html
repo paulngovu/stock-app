@@ -4,22 +4,24 @@
 
 <title>{{ title }}</title>
 
-<h1>My Dashboard</h1>
+<h1 class="title">My Dashboard</h1>
 <p>{{ errormsg }}</p>
 
-<div class="wrapper">
-  {% for company in companies %}
-    <div class="wrapper">
-      <div class="container">
-        <h2>{{ company.symbol }}</h2>
-        <h3>{{ company.name }}</h3>
-        <h4>{{ company.recommendation }}</h4>
-      </div>
+{% for company in companies %}
+  <div class="wrapper">
+    <div class="container">
+      <h2>{{ company.symbol }}</h2>
+      <h3>{{ company.name }}</h3>
+      <h4>{{ company.recommendation }}</h4>
     </div>
-  {% endfor %}
-</div>
+  </div>
+{% endfor %}
 
-<a class="btn btn-primary" href="{% url 'companies' %}">Manage Companies</a>
-<a class="btn btn-primary" href="{% url 'search' %}">Search for more companies</a>
+<div class="wrapper">
+  <a class="btn btn-primary" href="{% url 'companies' %}">Manage Companies</a>
+</div>
+<div class="wrapper">
+  <a class="btn btn-primary" href="{% url 'search' %}">Search for more companies</a>
+</div>
 
 {% endblock %}

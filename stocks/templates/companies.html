@@ -4,8 +4,8 @@
 
 <title>{{ title }}</title>
 
-<div class="wrapper">
-  {% for company in companies %}
+{% for company in companies %}
+  <div class="wrapper">
     <div class="container">
       <h2>{{ company.name }}</h2>
       <h3>{{ company.symbol }}</h3>
@@ -15,9 +15,11 @@
         <input type="submit" name="submit" value="Remove Company">
       </form>
     </div>
-  {% endfor %}
-</div>
+  </div>
+{% endfor %}
 
-<a class="btn btn-primary" href="/">Home</a>
+<div class="wrapper">
+  <a class="btn btn-primary" href="/">Home</a>
+</div>
 
 {% endblock %}

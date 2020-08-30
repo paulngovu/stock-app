@@ -4,11 +4,11 @@
 
 <title>{{ title }}</title>
 
-<h1>Search Results</h1>
+<h1 class="title">Search Results</h1>
 <p>{{ errormsg }}</p>
 
-<div class="wrapper">
-  {% for company in companies %}
+{% for company in companies %}
+  <div class="wrapper">
     <div class="container">
       <h2>{{ company.0 }}</h2>
       <h3>{{ company.1 }}</h3>
@@ -18,7 +18,7 @@
         <input type="submit" name="submit" value="Add Company">
       </form>
     </div>
-  {% endfor %}
-</div>
+  </div>
+{% endfor %}
 
 {% endblock %}
